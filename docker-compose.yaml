@@ -1,0 +1,41 @@
+version: '3.8'  # Versão da sintaxe do Docker Compose sendo utilizada
+
+services:
+
+  postgres_db:
+    image: database  # Imagem Docker a ser usada para o serviço
+    container_name: db_challenge # Nome personalizado para o contêiner
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - my-network
+    expose:
+      - "5432"
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres  # Define uma variável de ambiente no contêiner
+    # volumes:
+    #   - ./data:/app/data  # Monta um volume do host no contêiner
+
+
+  app:
+    image: python-app
+    container_name: app
+    networks:
+      - my-network
+    ports:
+      - "5000:5000"
+      - "8501:8501"
+    depends_on:
+      - postgres_db
+    
+
+
+networks:
+  my-network:
+
+volumes:
+  db-data:  # Define um volume personalizado
+
+
